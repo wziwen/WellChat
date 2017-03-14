@@ -28,6 +28,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.jph.takephoto:takephoto_library:4.0.3'
+    compile 'me.drakeet.multitype:multitype:2.4.3'
     compile 'com.hyphenate:hyphenate-sdk:3.3.0'
     compile 'com.android.support:design:25.2.0'
     testCompile 'junit:junit:4.12'

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseBaseActivity;
-import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.ziwenwen.wellchat.easemod.EaseChatFragment;
 
 public class ChatActivity extends EaseBaseActivity{
     public static ChatActivity activityInstance;

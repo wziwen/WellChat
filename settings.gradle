@@ -1,3 +1,4 @@
 include ':app'
 include ':easeui'
 include ':easeui/simpledemo'
+include ':sdkdemoapp3.0_android'

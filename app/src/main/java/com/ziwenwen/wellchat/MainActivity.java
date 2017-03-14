@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 List conversations = loadConversationList();
                 if (conversations != null) {
                     adapter.getItems().addAll(conversations);
-                    adapter.notifyDataSetChanged();
+                    refreshList();
                 }
 
                 // 加载通讯录
@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                         if (conversations != null) {
                             List<String> users = userList;
                             List<EMConversation> conversationList = conversations;
+                            // 去除重复内容
                             for (String user : users) {
                                 boolean hasConversation = false;
                                 for (EMConversation conversation : conversationList) {

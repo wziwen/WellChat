@@ -1,6 +1,7 @@
 package com.ziwenwen.wellchat;
 
 import android.app.Application;
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.hyphenate.chat.EMClient;
@@ -12,9 +13,12 @@ import com.hyphenate.easeui.controller.EaseUI;
  */
 public class App extends Application {
 
+    public static Context instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
 
         EMOptions options = new EMOptions();
         // TODO: 2017/3/9 动态配置key

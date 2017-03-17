@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     MultiTypeAdapter adapter;
 
-    List items;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,17 +67,14 @@ public class MainActivity extends AppCompatActivity {
                             List<EMConversation> conversationList = conversations;
                             // 去除重复内容
                             for (String user : users) {
-                                boolean hasConversation = false;
                                 for (EMConversation conversation : conversationList) {
                                     if (user.equals(conversation.conversationId())) {
-                                        hasConversation = true;
+                                        userList.remove(user);
                                         break;
                                     }
                                 }
-                                if (!hasConversation) {
-                                    items.add(user);
-                                }
                             }
+                            adapter.getItems().addAll(userList);
                         } else {
                             adapter.getItems().addAll(userList);
                         }

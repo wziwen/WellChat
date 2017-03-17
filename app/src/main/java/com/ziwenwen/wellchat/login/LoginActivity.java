@@ -1,4 +1,4 @@
-package com.ziwenwen.wellchat;
+package com.ziwenwen.wellchat.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -22,16 +22,17 @@ import android.widget.TextView;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.ziwenwen.wellchat.DataCenter;
+import com.ziwenwen.wellchat.MainActivity;
+import com.ziwenwen.wellchat.R;
+import com.ziwenwen.wellchat.base.BaseActivity;
+import com.ziwenwen.wellchat.base.BasePresenter;
+import com.ziwenwen.wellchat.base.BaseView;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
+public class LoginActivity extends BaseActivity<PLogin, Object> implements BaseView, LoginContact.IVLogin{
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -95,10 +96,6 @@ public class LoginActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -107,49 +104,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.doInBackground();
-//            mAuthTask.execute((Void) null);
-        }
-    }
-
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.length() > 1;
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        mPresenter.login(email, password);
     }
 
     /**
@@ -188,71 +143,26 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    @Override
+    public void onSuccess() {
 
-        private final String mEmail;
-        private final String mPassword;
-        private boolean result;
+    }
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
+    @Override
+    public void onFail(String msg) {
+        onPasswordError(msg);
+    }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            EMClient.getInstance().login(mEmail,mPassword,new EMCallBack() {//回调
-                @Override
-                public void onSuccess() {
-                    result = true;
-                    EMClient.getInstance().groupManager().loadAllGroups();
-                    EMClient.getInstance().chatManager().loadAllConversations();
-                    Log.d("main", "登录聊天服务器成功！");
-                    onPostExecute(true);
-                }
+    @Override
+    public void onPasswordError(String msg) {
+        mPasswordView.setError(msg);
+        mPasswordView.requestFocus();
+    }
 
-                @Override
-                public void onProgress(int progress, String status) {
-
-                }
-
-                @Override
-                public void onError(int code, String message) {
-                    result = false;
-                    Log.d("main", "登录聊天服务器失败！" + code + "    " + message);
-                    onPostExecute(false);
-                }
-            });
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mPasswordView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mAuthTask = null;
-                    showProgress(false);
-
-                    if (result) {
-                        gotoMainActivity();
-                    } else {
-                        mPasswordView.setError(getString(R.string.error_incorrect_password));
-                        mPasswordView.requestFocus();
-                    }
-                }
-            });
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
+    @Override
+    public void onAccountError(String msg) {
+        mEmailView.setError(msg);
+        mEmailView.requestFocus();
     }
 }
 

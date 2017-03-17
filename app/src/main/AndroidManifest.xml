@@ -43,6 +43,12 @@
                 <action android:name="android.intent.action.USER_PRESENT"/>
             </intent-filter>
         </receiver>
+        <!--来电事件监听-->
+        <receiver android:name=".easemod.CallReceiver">
+            <intent-filter>
+                <action android:name="com.hyphenate.action.incomingcall"/>
+            </intent-filter>
+        </receiver>
         <!-- 设置环信应用结束 -->
 
         <activity
@@ -59,6 +65,7 @@
         <activity android:name=".ChatActivity"/>
         <activity android:name=".easemod.VideoCallActivity"/>
         <activity android:name=".easemod.VoiceCallActivity"/>
+
     </application>
 
 </manifest>
